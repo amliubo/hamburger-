@@ -20,7 +20,7 @@
                     <div class="activity-container">
                         <div class="left-section">
                             <el-text class="name">{{ activity.author }}</el-text>
-                            <el-text class="time">{{ activity.time }}</el-text>
+                            <el-text class="time">@{{ formatTime(activity.time) }}</el-text>
                         </div>
                         <div class="right-section">
                             <el-text class="description">{{ activity.description }}</el-text>
@@ -74,6 +74,25 @@ export default {
     },
     components: { alert: Alert, },
     methods: {
+        formatTime(time) {
+            const now = new Date();
+            const activityTime = new Date(time);
+            const timeDiff = now - activityTime;
+            const seconds = Math.floor(timeDiff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            if (days > 0) {
+                return `${days} 天前`;
+            } else if (hours > 0) {
+                return `${hours} 小时前`;
+            } else if (minutes > 0) {
+                return `${minutes} 分钟前`;
+            } else {
+                return '刚刚';
+            }
+        },
         async fetchActivities() {
             this.activities = (await this.$axios.get('/post')).data;
         },
@@ -140,6 +159,12 @@ export default {
     flex-direction: column;
     width: 20%;
     margin-bottom: 5px;
+    align-items: flex-start;
+}
+
+.name,
+.time {
+    align-self: flex-start;
 }
 
 .right-section {
@@ -147,17 +172,6 @@ export default {
     flex-direction: column;
     width: 100%;
     margin-bottom: 5px;
-}
-
-.name {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-}
-
-.time {
-    font-size: 14px;
-    color: #666;
 }
 
 .description {
