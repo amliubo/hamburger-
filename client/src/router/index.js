@@ -6,15 +6,15 @@ import index from '@/components/index.vue';
 const routes = [
     {
         path: '/',
-        name: 'login',
-        component: login,
-        meta: { title: 'Login -TreeHole' }
-    },
-    {
-        path: '/index',
         name: 'index',
         component: index,
-        meta: { title: 'Index -TreeHole', requiresAuth: true },
+        meta: { title: 'Index -TreeHole' }
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: login,
+        meta: { title: 'Login -TreeHole', requiresAuth: true },
     },
 ];
 
