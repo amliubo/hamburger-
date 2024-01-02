@@ -19,16 +19,20 @@
                 <el-col :span="24">
                     <div class="activity-container">
                         <div class="left-section">
-                            <el-text class="name">{{ activity.author }}</el-text>
-                            <el-text class="time">@{{ formatTime(activity.time) }}</el-text>
+                            <div class="name">
+                                <el-text :style="{ fontWeight: 'bold' }">{{ activity.author }}</el-text>
+                            </div>
+                            <div class="time">
+                                <el-text :style="{ fontSize:'12px', color: '#888' }">@{{ formatTime(activity.time) }}</el-text>
+                            </div>
                         </div>
                         <div class="right-section">
                             <el-text class="description">{{ activity.description }}</el-text>
-                            <div class="action-buttons flex justify-space-between flex-wrap gap-4">
-                                <el-button type="danger" text @click="handleAction(activity._id, 'like')">
+                            <div class="action-buttons flex justify-space-between flex-wrap">
+                                <el-button size="small" type="danger" text :style="{ fontSize: '12px', color: '#red' }" @click="handleAction(activity._id, 'like')">
                                     oo [ {{ activity.like }} ]
                                 </el-button>
-                                <el-button type="danger" text @click="handleAction(activity._id, 'dislike')">
+                                <el-button size="small" type="success" text :style="{ fontSize: '12px', color: '#green' }" @click="handleAction(activity._id, 'dislike')">
                                     xx [ {{ activity.dislike }} ]
                                 </el-button>
                             </div>
@@ -84,11 +88,11 @@ export default {
             const days = Math.floor(hours / 24);
 
             if (days > 0) {
-                return `${days} 天前`;
+                return `${days}天前`;
             } else if (hours > 0) {
-                return `${hours} 小时前`;
+                return `${hours}小时前`;
             } else if (minutes > 0) {
-                return `${minutes} 分钟前`;
+                return `${minutes}分钟前`;
             } else {
                 return '刚刚';
             }
@@ -157,7 +161,7 @@ export default {
 .left-section {
     display: flex;
     flex-direction: column;
-    width: 20%;
+    width: 30%;
     margin-bottom: 5px;
     align-items: flex-start;
 }
