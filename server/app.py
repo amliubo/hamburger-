@@ -72,7 +72,3 @@ def dislike():
     _id = request.get_json().get('_id')
     mongo_db.activities.update_one({'_id': ObjectId(_id)}, {'$inc': {'dislike': 1}})
     return jsonify({'message': 'Dislike successful'})
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=app.config['DEBUG'])
