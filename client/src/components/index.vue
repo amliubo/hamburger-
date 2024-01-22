@@ -54,10 +54,10 @@
                 <alert :message="message" v-if="showMessage" />
                 <el-form :model="activity" ref="activityForm" label-width="auto">
                     <el-form-item label="昵称:" prop="author">
-                        <el-input v-model="activity.author" size="small" style="width: 20%;" clearable></el-input>
+                        <el-input v-model="activity.author" size="small" style="width: 40%;" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="邮箱:" prop="email" :rules="emailRules">
-                        <el-input v-model="activity.email" size="small" style="width: 20%;" clearable></el-input>
+                        <el-input v-model="activity.email" size="small" style="width: 40%;" clearable></el-input>
                     </el-form-item>
                     <el-input v-model="activity.description" maxlength="1000" show-word-limit
                         :autosize="{ minRows: 3, maxRows: 6 }" type="textarea" />
@@ -161,12 +161,12 @@ export default {
   
 <style>
 .header {
-    width: 40% !important;
+    margin-bottom: 10px;
     margin: 0 auto;
 }
 
 .container {
-    width: 40% !important;
+    width: 40%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -182,7 +182,7 @@ export default {
 .left-section {
     display: flex;
     flex-direction: column;
-    width: 24%;
+    width: 20%;
     margin-bottom: 5px;
     align-items: flex-start;
 }
@@ -193,8 +193,7 @@ export default {
 }
 
 .right-section {
-    flex-direction: column;
-    width: 100%;
+    width: 80%;
     margin-bottom: 5px;
 }
 
@@ -216,5 +215,22 @@ export default {
     display: flex;
     justify-content: space-between;
     padding: 10px;
+}
+
+
+@media (max-width: 768px) {
+
+    .header,
+    .container {
+        min-width: 100%;
+    }
+}
+
+@media (min-width: 769px) {
+
+    .header,
+    .container {
+        width: 40% !important;
+    }
 }
 </style>
