@@ -46,7 +46,7 @@
                                     </el-link>
                                     <el-link :underline="false" size="small" type="info" :style="{ fontSize: '12px' }"
                                         @click="toggleContent(activity._id)">
-                                        吐槽🙂[ {{ activity.comment.length }} ]
+                                        吐槽 [ {{ activity.comment.length }} ]
                                     </el-link>
                                 </div>
                                 <el-collapse v-show="showContent === activity._id" class="comment-collapse">
