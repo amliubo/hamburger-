@@ -2,12 +2,10 @@ import secrets
 from bson import ObjectId
 from config import Config
 from datetime import timedelta
-from dataclasses import dataclass
 from flask_cors import CORS
 from flask import Flask, jsonify, request, make_response
 from flask_jwt_extended import JWTManager, create_access_token
-from pymongo import MongoClient
-
+from pymongo import MongoClient, UpdateOne
 
 app = Flask(__name__)
 CORS(app, resources={r'/*': {'origins': '*'}})
@@ -20,21 +18,6 @@ app.config.from_object(Config)
 # MongoDB 配置
 client = MongoClient(app.config['MONGODB_URI'], connect=False)
 mongo_db = client.get_database()
-
-# 模型
-@dataclass
-class User:
-    username: str
-    password: str
-
-@dataclass
-class Action:
-    author: str
-    email: str
-    description: str
-    time: str
-    like: int
-    dislike: int
 
 # 路由
 @app.route('/token', methods=['POST'])
@@ -53,22 +36,43 @@ def activities():
     if request.method == 'GET':
         activities = mongo_db.activities.find({}).sort('time', -1)
         serialized_activities = [{'_id': str(activity['_id']), 'author': str(activity['author']),'email': str(activity['email']),'description': str(activity['description']),
-                                  'time': str(activity['time']),'like':activity['like'],'dislike':activity['dislike']} for activity in activities]
+                                  'time': str(activity['time']),'like':activity['like'],'dislike':activity['dislike'],'comment':activity['comment']} for activity in activities]
         return jsonify(serialized_activities)
     elif request.method == 'POST':
         data = request.json
-        mongo_db.activities.insert_one(data)
-        return jsonify({'message': 'Activity created successfully'}), 201
+        if 'activity_id' in data:
+            activity_id = data.pop('activity_id')
+            mongo_db.activities.update_one({'_id': ObjectId(activity_id)}, {'$push': {'comment': data}})
+            return jsonify({'message': 'secuess'})
+        else:
+            mongo_db.activities.insert_one(data)
+            return jsonify({'message': 'secuess'})
     
 @app.route('/like', methods=['POST'])
 def like():
-    _id = request.get_json().get('_id')
-    mongo_db.activities.update_one({'_id': ObjectId(_id)}, {'$inc': {'like': 1}})
-    return jsonify({'message': 'Like successful'})
+    data = request.get_json()
+    _id = ObjectId(data.get('_id'))
+    comment_id = data.get('comment_id')
+    if comment_id is not None:
+        query = {'_id': _id, 'comment.comment_id': comment_id}
+        update = UpdateOne(query, {'$inc': {'comment.$.like': 1}})
+    else:
+        query = {'_id': _id}
+        update = UpdateOne(query, {'$inc': {'like': 1}})
+    mongo_db.activities.bulk_write([update])
+    return jsonify({'message': 'success'})
 
 
 @app.route('/dislike', methods=['POST'])
 def dislike():
-    _id = request.get_json().get('_id')
-    mongo_db.activities.update_one({'_id': ObjectId(_id)}, {'$inc': {'dislike': 1}})
-    return jsonify({'message': 'Dislike successful'})
+    data = request.get_json()
+    _id = ObjectId(data.get('_id'))
+    comment_id = data.get('comment_id')
+    if comment_id is not None:
+        query = {'_id': _id, 'comment.comment_id': comment_id}
+        update = UpdateOne(query, {'$inc': {'comment.$.dislike': 1}})
+    else:
+        query = {'_id': _id}
+        update = UpdateOne(query, {'$inc': {'dislike': 1}})
+    mongo_db.activities.bulk_write([update])
+    return jsonify({'message': 'success'})
