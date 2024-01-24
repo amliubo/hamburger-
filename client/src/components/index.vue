@@ -6,6 +6,7 @@
             <el-menu :default-active="activeIndex" class="el-menu-demo" background-color="#333333" text-color="#fff"
                 active-text-color="#ffd04b" mode="horizontal" :ellipsis="false" @select="handleSelect">
                 <el-menu-item index="1" style="font-size: 16px;">树洞</el-menu-item>
+                <el-menu-item index="2" style="font-size: 16px;">猜数字</el-menu-item>
                 <div class="flex-grow" />
                 <el-menu-item index="9" style="font-size: 16px;">个人中心</el-menu-item>
             </el-menu>
@@ -131,6 +132,11 @@
                     </el-form-item>
                 </el-form>
             </div>
+            <div v-show="activeIndex === '2'">
+                <div style="height: 450px;">
+                    <NumberGuessingGame />
+                </div>
+            </div>
             <div v-show="activeIndex === '9'">
                 <el-text size="large" style="font-style: italic;">## 个人中心</el-text>
                 <el-divider />
@@ -150,6 +156,7 @@
 <script>
 import Alert from '@/components/Alert.vue';
 import Footer from '@/components/Footer.vue';
+import NumberGuessingGame from '@/components/GuessNum.vue'
 import { v4 as uuidv4 } from 'uuid';
 
 export default {
@@ -172,7 +179,7 @@ export default {
             showContent: false,
         };
     },
-    components: { alert: Alert, Footer },
+    components: { alert: Alert, Footer, NumberGuessingGame },
     methods: {
         handleSelect(index) {
             this.activeIndex = index;
