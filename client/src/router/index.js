@@ -8,7 +8,7 @@ const routes = [
         path: '/',
         name: 'index',
         component: index,
-        meta: { title: 'TreeHole' }
+        meta: { title: 'Humburger' }
     },
     {
         path: '/login',

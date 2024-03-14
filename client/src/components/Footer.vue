@@ -1,10 +1,10 @@
 <template>
     <div class="footer-container">
         <div class="footer">
-            <a href="https://beian.miit.gov.cn/" rel="external nofollow">
+            <a href="https://beian.miit.gov.cn/">
                 沪ICP备2024041855号-1
             </a>
-            · © 2024 hamburger
+            · © Hamburger
         </div>
     </div>
 </template>
@@ -16,8 +16,8 @@
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-    width: 100%; /* 让底部组件占据整个宽度 */
-    min-height: 50px; /* 设置底部组件的最小高度 */
+    width: 100%;
+    min-height: 50px;
 }
 
 .footer {
