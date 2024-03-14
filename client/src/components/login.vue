@@ -1,8 +1,6 @@
 <template>
   <div class="container">
     <div class="login-container">
-      <img src="@/assets/logo.png" alt="Logo" class="logo" />
-      <br>
       <el-form :model="loginData" ref="loginForm" class="login-form">
         <el-form-item prop="username">
           <el-input v-model="loginData.username" placeholder="Username" />
@@ -65,12 +63,6 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100vh;
-}
-
-.logo {
-  width: 100%;
-  max-width: 200px;
-  height: auto;
 }
 
 .login-form {
