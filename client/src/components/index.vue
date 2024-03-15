@@ -12,7 +12,7 @@
         <el-menu-item index="0">😎 关于</el-menu-item>
         <el-menu-item index="1">✌️ 树洞</el-menu-item>
         <el-menu-item index="2">😍 记录</el-menu-item>
-        <el-menu-item index="3">🤣 猜数字</el-menu-item>
+        <el-menu-item index="3">🎲 猜数字</el-menu-item>
 
         <el-sub-menu index="4">
           <template #title>📖 学习</template>
@@ -53,11 +53,8 @@
 import About from '@/components/About.vue';
 import TreeHole from '@/components/TreeHole.vue';
 import Record from '@/components/Record.vue';
-import Alert from '@/components/Alert.vue';
 import Footer from '@/components/Footer.vue';
 import NumberGuessingGame from '@/components/GuessNum.vue';
-import LoginForm from '@/components/LoginForm.vue';
-import { v4 as uuidv4 } from 'uuid';
 
 export default {
   data() {
@@ -103,7 +100,7 @@ export default {
       this.isAuthenticated = newValue === this.correctPassword;
     }
   },
-  components: { About, TreeHole, Record, alert: Alert, Footer, NumberGuessingGame, LoginForm },
+  components: { About, TreeHole, Record, Footer, NumberGuessingGame },
   methods: {
     handleSelect(index) {
       this.activeIndex = index;

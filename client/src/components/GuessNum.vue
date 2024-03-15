@@ -1,34 +1,60 @@
 <template>
     <div>
-        <h2>Number guessing game</h2>
-
-        <p>
-            We have selected a random number between 1 and 100. See if you can guess it
-            in 10 turns or fewer. We'll tell you if your guess was too high or too low.
-        </p>
+        <div class="profile-container">
+            <div class="profile-description" style="flex: 1;">
+                <div>
+                    <p class="profile-title" style="font-size: 20px; font-weight: bold; margin-bottom: 10px;">
+                        Welcome！</p>
+                    <p style="font-size: 16px;">欢迎来到这个有趣的 JavaScript 教程游戏！</p>
+                    <p style="font-size: 16px;">看看你能否在 10 圈内猜中它，我们会告诉你你的猜测是否太高或太低。享受刺激，体验 JavaScript
+                        的魔力吧！😄🎉
+                    </p>
+                    <p style="font-size: 16px;">这个游戏的目标是在最少的猜测次数内猜到正确的数字。你可以通过输入数字并点击提交按钮来进行猜测，系统会告诉你你的猜测是否正确，或者是否太高或太低。
+                        加油吧！💪🔥
+                    </p>
+                </div>
+            </div>
+            <img src="../assets/js.png" style="margin-right: 20px;">
+        </div>
 
         <div class="form">
-            <label for="guessField">Enter a guess: </label>
-            <input type="number" min="1" max="100" required v-model="userGuess" @input="updateGuess" class="guessField" />
-            <button @click="checkGuess" :disabled="guessFieldDisabled" class="guessButton">Submit</button>
+            <br>
+            <el-form :model="formData" :rules="formRules" ref="form">
+                <el-form-item prop="userGuess">
+                    <el-input v-model.number="formData.userGuess" min="1" max="100" required clearable></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="checkGuess" :disabled="guessFieldDisabled" type="primary">提交</el-button>
+                </el-form-item>
+            </el-form>
         </div>
 
         <div class="resultParas">
-            <p v-if="guesses.length > 0">Previous guesses: {{ guesses.join(' ') }}</p>
+            <p v-if="guesses.length > 0">上次猜测: {{ guesses.join(' ') }}</p>
             <p class="lastResult" :style="{ backgroundColor: lastResultColor }">{{ lastResult }}</p>
             <p>{{ lowOrHi }}</p>
         </div>
 
-        <button v-if="gameOver" @click="resetGame" class="resetButton">Start new game</button>
+        <el-button v-if="gameOver" @click="resetGame" type="primary">开始新游戏 😊</el-button>
     </div>
 </template>
-  
+
+
 <script>
 export default {
     data() {
         return {
             randomNumber: Math.floor(Math.random() * 100) + 1,
-            userGuess: '',
+            formData: {
+                userGuess: ''
+            },
+            formRules: {
+                userGuess: [
+                    { required: true, message: '输入你的猜测', trigger: 'blur' },
+                    { type: 'number', message: '输入有效号码', trigger: 'blur' },
+                    { min: 1, max: 100, message: '数字必须介于 1 到 100 之间', trigger: 'blur' }
+                ]
+            },
             guesses: [],
             lastResult: '',
             lastResultColor: 'white',
@@ -39,20 +65,17 @@ export default {
         };
     },
     methods: {
-        updateGuess() {
-            // Optional: Add validation if needed
-        },
         checkGuess() {
-            const userGuess = Number(this.userGuess);
+            const userGuess = Number(this.formData.userGuess);
 
             if (this.guessCount === 1) {
-                this.guesses.push('Previous guesses:');
+                this.guesses.push('之前的猜测:');
             }
 
             this.guesses.push(userGuess);
 
             if (userGuess === this.randomNumber) {
-                this.lastResult = 'Congratulations! You got it right!';
+                this.lastResult = '恭喜！ 你做对了！';
                 this.lastResultColor = 'green';
                 this.lowOrHi = '';
                 this.setGameOver();
@@ -64,14 +87,14 @@ export default {
                 this.lastResult = 'Wrong!';
                 this.lastResultColor = 'red';
                 if (userGuess < this.randomNumber) {
-                    this.lowOrHi = 'Last guess was too low!';
+                    this.lowOrHi = '最后的猜测太低了！';
                 } else if (userGuess > this.randomNumber) {
-                    this.lowOrHi = 'Last guess was too high!';
+                    this.lowOrHi = '最后的猜测太高了！';
                 }
             }
 
             this.guessCount++;
-            this.userGuess = '';
+            this.formData.userGuess = '';
         },
         setGameOver() {
             this.guessFieldDisabled = true;
@@ -85,42 +108,34 @@ export default {
             this.lowOrHi = '';
             this.guessFieldDisabled = false;
             this.gameOver = false;
-            this.userGuess = '';
+            this.formData.userGuess = '';
             this.randomNumber = Math.floor(Math.random() * 100) + 1;
         },
     },
 };
 </script>
+
 <style scoped>
-.guessField {
-    width: 140px;
-    height: 25px;
-    padding: 5px;
-    margin-right: 10px;
+.profile-container {
+    display: flex;
+    align-items: center;
 }
 
-.guessButton {
-    width: 100px;
-    height: 30px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
+.profile-description {
+    flex: 1;
+    margin-right: 20px;
 }
 
-.guessButton:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+.resultParas p {
+    margin: 5px 0;
 }
 
-.resetButton {
-    width: 120px;
-    height: 30px;
-    background-color: #2196f3;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
+.lastResult {
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.form {
+    margin-bottom: 20px;
 }
 </style>

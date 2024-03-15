@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import store from '@/store';
-import login from '@/components/login.vue';
 import index from '@/components/index.vue';
 
 const routes = [
@@ -9,12 +8,6 @@ const routes = [
         name: 'index',
         component: index,
         meta: { title: 'Humburger' }
-    },
-    {
-        path: '/login',
-        name: 'login',
-        component: login,
-        meta: { title: 'Login -TreeHole', requiresAuth: true },
     },
 ];
 
