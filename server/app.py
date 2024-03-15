@@ -86,7 +86,3 @@ def dislike_post(data):
     update = UpdateOne(query, {"$inc": {"dislike": 1}})
     mongo_db.posts.bulk_write([update])
     return jsonify({"message": "success"})
-
-
-if __name__ == "__main__":
-    app.run(host="10.10.20.24", port=8000, debug=True)
