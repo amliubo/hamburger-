@@ -12,7 +12,7 @@
         </el-row>
         <el-row v-else>
             <el-col :span="24">
-                <el-card v-for="activity in activities" :key="activity._id">
+                <el-card v-for="activity in activities" :key="activity._id" class="custom-card">
                     <div class="activity-header">
                         <!-- <el-avatar :src="activity.avatar" :size="40"></el-avatar> -->
                         <el-avatar :src="`https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg`"
@@ -23,13 +23,13 @@
                         </div>
                     </div>
                     <p></p>
-                    <div>{{ activity.description }}</div>
+                    <div class="description">{{ activity.description }}</div>
                     <div class="activity-action-buttons">
                         <el-link :underline="false" size="small" type="danger"
-                            @click="handleAction(activity._id, 'like')">👍（{{ activity.like }}）</el-link>
+                            @click="handleAction(activity._id, 'like')">👍[ {{ activity.like }} ]</el-link>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <el-link :underline="false" size="small" type="success"
-                            @click="handleAction(activity._id, 'dislike')">👎（{{ activity.dislike }}）</el-link>
+                            @click="handleAction(activity._id, 'dislike')">👎[ {{ activity.dislike }} ]</el-link>
                     </div>
                 </el-card>
             </el-col>
@@ -52,8 +52,6 @@
                 </el-form-item>
             </el-form>
         </el-card>
-
-
     </div>
 </template>
 
@@ -155,7 +153,9 @@ export default {
 }
 
 .el-card {
-    margin-bottom: 15px;
+    margin-bottom: 1.5%;
+    padding: 0.1px;
+    font-size: 14px;
 }
 
 .author {
@@ -184,5 +184,16 @@ export default {
 
 .bold-label .el-form-item__label {
     font-weight: bold;
+}
+
+.description {
+    margin-bottom: 0.1px;
+    max-height: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
 }
 </style>

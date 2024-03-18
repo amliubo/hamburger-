@@ -1,20 +1,17 @@
 <template>
   <el-scrollbar height="100vh">
-    <p />
-    <br>
     <div class="header">
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" :ellipsis="false"
-        @select="handleSelect">
+      <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
         <el-menu-item>
-          <img style="width: 170px" src="../assets/logo.png" />
+          <img style="width: 220px" src="@/assets/logo.png" />
         </el-menu-item>
         <div class="flex-grow" />
         <el-menu-item index="0">😎 关于</el-menu-item>
         <el-menu-item index="1">✌️ 树洞</el-menu-item>
         <el-menu-item index="2">😍 记录</el-menu-item>
-        <el-menu-item index="3">🎲 猜数字</el-menu-item>
-
-        <el-sub-menu index="4">
+        <el-menu-item index="3">👀 数据</el-menu-item>
+        <el-menu-item index="4">🎲 猜数字</el-menu-item>
+        <el-sub-menu index="5">
           <template #title>📖 学习</template>
           <el-menu-item index="2-1">Java Script</el-menu-item>
           <el-menu-item index="2-2">Python</el-menu-item>
@@ -30,21 +27,22 @@
     </div>
     <div class="container">
       <br />
-      <div v-show="activeIndex === '0'" class="profile-container" style="display: flex; align-items: center;">
+      <div v-show="activeIndex === '0'">
         <About />
+        <Footer />
       </div>
-      <div v-show="activeIndex === '1'" style="min-height: 680px;">
+      <div v-show="activeIndex === '1'">
         <TreeHole />
       </div>
       <div v-show="activeIndex === '2'">
         <Record />
       </div>
-      <div v-show="activeIndex === '3'" style="height: 680px;">
-        <div style="height: 450px;">
-          <NumberGuessingGame />
-        </div>
+      <div v-show="activeIndex === '3'">
+        <Data />
       </div>
-      <Footer />
+      <div v-show="activeIndex === '4'">
+        <NumberGuessingGame />
+      </div>
     </div>
   </el-scrollbar>
 </template>
@@ -53,59 +51,22 @@
 import About from '@/components/About.vue';
 import TreeHole from '@/components/TreeHole.vue';
 import Record from '@/components/Record.vue';
-import Footer from '@/components/Footer.vue';
+import Data from '@/components/Data.vue';
 import NumberGuessingGame from '@/components/GuessNum.vue';
+import Footer from '@/components/Footer.vue';
 
 export default {
   data() {
     return {
       activeIndex: '0',
-      // 记录
-      password: '',
-      correctPassword: 'iamliu',
-      isAuthenticated: false,
-      activity: {
-        author: '',
-        email: '',
-        description: '',
-        time: new Date().toISOString(),
-        'like': 0,
-        'dislike': 0,
-        'comment': []
-      },
-      // 吐槽
-      comact: {
-        author: '大帅逼',
-        email: '1105729770@qq.com',
-        description: '',
-        time: new Date().toISOString(),
-        like: 0,
-        dislike: 0
-      },
-      activities: [],
-      submitting: false,
-      emailRules: [
-        { type: 'email', message: '输入有效的邮箱', trigger: ['blur'] },
-      ],
-      message: '',
-      msgClass: '',
-      releaseMsg: false,
-      commentMsg: false,
-      msgTime: Date.now(),
-      showContent: false,
     };
   },
-  watch: {
-    password(newValue) {
-      this.isAuthenticated = newValue === this.correctPassword;
-    }
-  },
-  components: { About, TreeHole, Record, Footer, NumberGuessingGame },
   methods: {
     handleSelect(index) {
       this.activeIndex = index;
     }
-  }
+  },
+  components: { About, TreeHole, Record, Data, Footer, NumberGuessingGame }
 };
 </script>
 
@@ -121,8 +82,6 @@ export default {
   display: flex;
   flex-direction: column;
   padding: 10px;
-  /* 边框 */
-  /* border: 1px solid #ddd; */
   margin-bottom: 10px;
 }
 
@@ -142,7 +101,7 @@ export default {
 
   .header,
   .container {
-    width: 50% !important;
+    width: 60% !important;
   }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-alert :title="`-- Baby 我们 ${formattedElapsedTime}啦啦啦！🎈`" type="error" effect="dark" :closable="false" />
+        <el-alert :title="`-- 我们已经一起度过了 ${formattedElapsedTime}啦！🎈💕`" type="error" effect="dark" :closable="false" />
         <br>
         <div v-if="!isAuthenticated" class="password-container">
             <div class="input-container">
