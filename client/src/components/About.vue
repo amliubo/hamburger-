@@ -1,5 +1,5 @@
 <template>
-    <el-avatar :size="170" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+    <el-avatar :size="180" shape="square" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
         style="margin-right: 20px;" />
     <div class="profile-description" style="flex: 1;">
         <div>

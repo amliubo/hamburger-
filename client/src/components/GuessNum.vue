@@ -3,18 +3,17 @@
         <div class="profile-container">
             <div class="profile-description" style="flex: 1;">
                 <div>
-                    <p class="profile-title" style="font-size: 20px; font-weight: bold; margin-bottom: 10px;">
-                        Welcome！</p>
+                    <p class="profile-title"
+                        style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">
+                        Welcome！
+                    </p>
                     <p style="font-size: 16px;">欢迎来到这个有趣的 JavaScript 教程游戏！</p>
                     <p style="font-size: 16px;">看看你能否在 10 圈内猜中它，我们会告诉你你的猜测是否太高或太低。享受刺激，体验 JavaScript
                         的魔力吧！😄🎉
                     </p>
-                    <p style="font-size: 16px;">这个游戏的目标是在最少的猜测次数内猜到正确的数字。你可以通过输入数字并点击提交按钮来进行猜测，系统会告诉你你的猜测是否正确，或者是否太高或太低。
-                        加油吧！💪🔥
-                    </p>
                 </div>
             </div>
-            <img src="../assets/js.png" style="margin-right: 20px;">
+            <img src="@/assets/js.png" style="margin-right: 20px;">
         </div>
 
         <div class="form">

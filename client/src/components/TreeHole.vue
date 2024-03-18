@@ -16,7 +16,7 @@
                     <div class="activity-header">
                         <!-- <el-avatar :src="activity.avatar" :size="40"></el-avatar> -->
                         <el-avatar :src="`https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg`"
-                            :size="42"></el-avatar>
+                            :size="34"></el-avatar>
                         <div class="author-time">
                             <span class="author">@{{ activity.author }}</span>
                             <span class="time">{{ formatTime(activity.time) }} {{ activity.city }}</span>
@@ -34,11 +34,12 @@
                 </el-card>
             </el-col>
         </el-row>
+        <p></p>
         <!-- 发帖表单 -->
         <el-card>
             <el-form :model="activity" ref="activityForm" label-width="auto">
                 <el-form-item label="昵称:" prop="author" class="bold-label">
-                    <el-input v-model="activity.author" size="small" style="width: 30%;" clearable
+                    <el-input v-model="activity.author" size="small" style="width: 50%;" clearable
                         class="bold-input"></el-input>
                 </el-form-item>
                 <el-form-item label="内容:" prop="description" class="bold-label">
@@ -155,7 +156,7 @@ export default {
 .el-card {
     margin-bottom: 1.5%;
     padding: 0.1px;
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .author {
@@ -188,12 +189,5 @@ export default {
 
 .description {
     margin-bottom: 0.1px;
-    max-height: 100px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-wrap: break-word;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
 }
 </style>

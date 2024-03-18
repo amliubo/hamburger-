@@ -19,19 +19,12 @@
             </div>
         </div>
         <div v-if="isAuthenticated">
-            <el-button type="primary" @click="showFormDialog" size="large"><el-icon>
-                    <Plus />
-                </el-icon>新增事件</el-button>
-            <br>
+            <el-button type="primary" @click="showFormDialog" size="large">✍️ 记录一下</el-button>
+            <p></p>
             <el-dialog v-model="formDialogVisible" title="Add" :width="awidthVariable">
                 <el-form :model="activity" ref="activityForm" label-width="auto">
-                    <el-form-item label="活动:" prop="action"
-                        :rules="[{ required: true, message: '请输入活动', trigger: 'blur' }]">
-                        <el-input v-model="activity.action" placeholder="Enter action" clearable></el-input>
-                    </el-form-item>
-
                     <el-form-item label="描述:" prop="description">
-                        <el-input v-model="activity.description" placeholder="Enter description" clearable></el-input>
+                        <el-input v-model="activity.description" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="图片:" prop="description">
                         <el-upload @change="handleFileChange" ref="upload" action="/activities" list-type="picture-card"
@@ -59,18 +52,16 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="submitActivity" :loading="submitting"><el-icon>
-                                <Plus />
-                            </el-icon>添加</el-button>
+                        <el-button type="primary" @click="submitActivity" :loading="submitting">添加</el-button>
                     </el-form-item>
                 </el-form>
             </el-dialog>
 
             <el-dialog v-model="dialogVisible">
-                <img w-full :src="dialogImageUrl" alt="Preview Image" />
+                <img w-full :src="dialogImageUrl" />
             </el-dialog>
 
-            <el-dialog v-model="dialogFormVisible" title="Details" :width="dwidthVariable">
+            <el-dialog v-model="dialogFormVisible" :width="dwidthVariable">
                 <div>
                     <el-carousel :interval="5000" arrow="always">
                         <el-carousel-item v-for="imageData in selectedActivity.image" :key="imageData">
@@ -89,8 +80,8 @@
 
             <el-row>
                 <el-col v-for="activity in activities" :key="activity._id" :span="6">
-                    <el-card :body-style="{ padding: '0px' }" class="activity-card">
-                        <img :src="activity.author === 'hanbao' ? hanbaoUrl : baoUrl" class="image" />
+                    <el-card :body-style="{ padding: '10px' }" class="activity-card">
+                        <!-- <img :src="activity.author === 'hanbao' ? hanbaoUrl : baoUrl" class="image" /> -->
                         <div style="padding: 14px">
                             <span>{{ activity.action }}</span>
                             <div class="bottom">
@@ -101,9 +92,6 @@
                             </div>
                         </div>
                     </el-card>
-                </el-col>
-                <el-col v-if="activities.length === 0" :span="24">
-                    <el-alert title="No activities found" type="info" show-icon :closable="false"></el-alert>
                 </el-col>
             </el-row>
         </div>
@@ -118,7 +106,7 @@ export default {
             isAuthenticated: false,
             awidthVariable: '33%',
             dwidthVariable: '30%',
-            activity: { action: '', description: '', time: new Date().toISOString(), image: [] },
+            activity: { description: '', time: new Date().toISOString(), image: [] },
             activities: [],
             startTime: new Date('2023-11-01T00:00:00').getTime(),
             elapsedTime: 0,
@@ -151,12 +139,8 @@ export default {
             this.activities = (await this.$axios.get('/activities')).data;
         },
         async submitActivity() {
-            if (this.activity.action.length === 0) {
-                return;
-            }
             try {
                 this.submitting = true;
-                this.activity.author = this.$store.getters.currentUser;
                 this.activity.image = await Promise.all(this.selectedFiles.map(async file => {
                     const base64Data = await this.convertFileToBase64(file.raw);
                     return base64Data
