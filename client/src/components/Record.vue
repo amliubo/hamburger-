@@ -21,20 +21,24 @@
         <div v-if="isAuthenticated">
             <el-button type="primary" @click="showFormDialog" size="large">✍️ 记录一下</el-button>
             <p></p>
-            <el-dialog v-model="formDialogVisible" title="Add" :width="awidthVariable">
+            <el-dialog v-model="formDialogVisible" :width="awidthVariable" :fullscreen="isMobile" :append-to-body="true">
+
+                <span slot="title"></span>
                 <el-form :model="activity" ref="activityForm" label-width="auto">
-                    <el-form-item label="描述:" prop="description">
-                        <el-input v-model="activity.description" clearable></el-input>
+                    <el-form-item prop="description">
+                        <el-input v-model="activity.description" type="textarea" placeholder="点击开始输入..." maxlength="999"
+                            show-word-limit clearable :autosize="{ minRows: 2, maxRows: 6 }"></el-input>
                     </el-form-item>
-                    <el-form-item label="图片:" prop="description">
+                    <el-form-item prop="description">
                         <el-upload @change="handleFileChange" ref="upload" action="/activities" list-type="picture-card"
-                            :auto-upload="false" :file-list="selectedFiles" @remove="handleRemove">
+                            :auto-upload="false" :file-list="selectedFiles" @remove="handleRemove"
+                            accept="image/*, video/*">
                             <el-icon>
                                 <Plus />
                             </el-icon>
                             <template #file="{ file }">
                                 <div>
-                                    <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
+                                    <img class="el-upload-list__item-thumbnail" :src="file.url" />
                                     <span class="el-upload-list__item-actions">
                                         <span class="el-upload-list__item-preview"
                                             @click="handlePictureCardPreview(file)">
@@ -52,7 +56,7 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="submitActivity" :loading="submitting">添加</el-button>
+                        <el-button type="primary" @click="submitActivity" :loading="submitting">✌️添加</el-button>
                     </el-form-item>
                 </el-form>
             </el-dialog>
@@ -61,7 +65,7 @@
                 <img w-full :src="dialogImageUrl" />
             </el-dialog>
 
-            <el-dialog v-model="dialogFormVisible" :width="dwidthVariable">
+            <el-dialog v-model="dialogFormVisible" :width="dwidthVariable" :fullscreen="isMobile">
                 <div>
                     <el-carousel :interval="5000" arrow="always">
                         <el-carousel-item v-for="imageData in selectedActivity.image" :key="imageData">
@@ -79,15 +83,16 @@
             </el-dialog>
 
             <el-row>
-                <el-col v-for="activity in activities" :key="activity._id" :span="6">
-                    <el-card :body-style="{ padding: '10px' }" class="activity-card">
-                        <!-- <img :src="activity.author === 'hanbao' ? hanbaoUrl : baoUrl" class="image" /> -->
+                <el-col v-for="activity in activities" :key="activity._id" :span="getColumnSpan">
+                    <el-card
+                        :body-style="{ padding: '10px', backgroundImage: `url(${getBackgroundImage(activity.time)})` }">
                         <div style="padding: 14px">
                             <span>{{ activity.action }}</span>
                             <div class="bottom">
                                 <time class="time">{{ formattedCurrentDate(activity.time) }}</time>
                                 <div class="button-container">
-                                    <el-button class="button" @click="showActivityDetails(activity)">详情</el-button>
+                                    <el-button type="primary" plain
+                                        @click="showActivityDetails(activity)">详情</el-button>
                                 </div>
                             </div>
                         </div>
@@ -104,7 +109,7 @@ export default {
             password: '',
             correctPassword: 'iamliu',
             isAuthenticated: false,
-            awidthVariable: '33%',
+            awidthVariable: '30%',
             dwidthVariable: '30%',
             activity: { description: '', time: new Date().toISOString(), image: [] },
             activities: [],
@@ -118,9 +123,13 @@ export default {
             submitting: false,
             selectedActivity: null,
             dialogFormVisible: false,
+            isMobile: false
         };
     },
     computed: {
+        getColumnSpan() {
+            return window.innerWidth > 768 ? 6 : 12;
+        },
         formattedElapsedTime() {
             const days = Math.floor(this.elapsedTime / (3600 * 24));
             const hours = Math.floor((this.elapsedTime % (3600 * 24)) / 3600);
@@ -135,8 +144,18 @@ export default {
         }
     },
     methods: {
+        checkIsMobile() {
+            this.isMobile = window.innerWidth < 768;
+        },
         async fetchActivities() {
             this.activities = (await this.$axios.get('/activities')).data;
+        },
+        getBackgroundImage(date) {
+            const year = new Date(date).getFullYear();
+            const month = String(new Date(date).getMonth() + 1).padStart(2, '0');
+            const day = String(new Date(date).getDate()).padStart(2, '0');
+            return `url(https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg)`
+            return `url(https://example.com/${year}-${month}-${day}.jpg)`;
         },
         async submitActivity() {
             try {
@@ -208,6 +227,7 @@ export default {
     mounted() {
         this.fetchActivities();
         this.updateElapsedTime();
+        this.checkIsMobile();
     },
 };
 </script>
@@ -242,8 +262,6 @@ export default {
     margin-bottom: 0;
 }
 
-
-/* 内容显示区域样式 */
 .content {
     padding: 20px;
     border: 1px solid #ddd;
@@ -251,13 +269,20 @@ export default {
     background-color: #f9f9f9;
 }
 
-/* 标题样式 */
+.no-header .el-dialog__header {
+    display: none;
+}
+
+.el-carousel__item {
+    margin-right: 20px;
+}
+
 .content h2 {
     font-size: 20px;
     color: #333;
 }
 
-/* 内容样式 */
+
 .content p {
     font-size: 16px;
     color: #666;
