@@ -3,7 +3,7 @@ from config import Config
 from flask_cors import CORS
 from flask import Flask, jsonify, request
 from flask_jwt_extended import JWTManager
-from pymongo import MongoClient, UpdateOne
+from pymongo import MongoClient, UpdateOne, DESCENDING
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -45,7 +45,7 @@ def create_activity():
 
 @app.route("/activities", methods=["GET"])
 def read_activities():
-    activities = mongo_db.activities.find({}, {"_id": False})
+    activities = mongo_db.activities.find({}, {"_id": False}).sort("time", DESCENDING)
     return jsonify(list(activities))
 
 
