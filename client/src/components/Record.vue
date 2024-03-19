@@ -21,7 +21,8 @@
         <div v-if="isAuthenticated">
             <el-button type="primary" @click="showFormDialog" size="large">✍️ 记录一下</el-button>
             <p></p>
-            <el-dialog v-model="formDialogVisible" :width="awidthVariable" :fullscreen="isMobile" :append-to-body="true">
+            <el-dialog v-model="formDialogVisible" :width="awidthVariable" :fullscreen="isMobile"
+                :append-to-body="true">
 
                 <span slot="title"></span>
                 <el-form :model="activity" ref="activityForm" label-width="auto">
@@ -40,11 +41,12 @@
                                 <div>
                                     <img class="el-upload-list__item-thumbnail" :src="file.url" />
                                     <span class="el-upload-list__item-actions">
-                                        <span class="el-upload-list__item-preview"
+                                        <!-- 如果不是移动端或者 disabled 为真，则显示预览按钮 -->
+                                        <span v-if="!isMobile || disabled" class="el-upload-list__item-preview"
                                             @click="handlePictureCardPreview(file)">
                                             <el-icon><zoom-in /></el-icon>
                                         </span>
-                                        <span v-if="!disabled" class="el-upload-list__item-delete"
+                                        <span class="el-upload-list__item-delete"
                                             @click="handleRemove(file)">
                                             <el-icon>
                                                 <Delete />
