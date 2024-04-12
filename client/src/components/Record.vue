@@ -115,7 +115,7 @@ export default {
             dwidthVariable: '30%',
             activity: { description: '', time: new Date().toISOString(), image: [] },
             activities: [],
-            startTime: new Date('2023-11-01T00:00:00').getTime(),
+            startTime: new Date('2023-10-31T22:01:01').getTime(),
             elapsedTime: 0,
             disabled: false,
             dialogVisible: false,

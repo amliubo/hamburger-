@@ -15,7 +15,7 @@
                 <el-card v-for="activity in activities" :key="activity._id" class="custom-card">
                     <div class="activity-header">
                         <!-- <el-avatar :src="activity.avatar" :size="40"></el-avatar> -->
-                        <el-avatar :src="`https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg`"
+                        <el-avatar :src="`https://raw.githubusercontent.com/sweeterio/pixelpunks/main/punk6895.png`"
                             :size="34"></el-avatar>
                         <div class="author-time">
                             <span class="author">@{{ activity.author }}</span>

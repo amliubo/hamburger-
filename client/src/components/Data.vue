@@ -4,118 +4,59 @@
 
 <script>
 import * as echarts from 'echarts';
+import axios from 'axios';
 
 export default {
-    data() {
-        return {
-            chartData: null // 保存数据的变量
-        };
-    },
     mounted() {
-        this.$nextTick(() => {
-            this.initChart();
-        });
-    },
-    activated() {
         this.initChart();
     },
     methods: {
         initChart() {
             const chartDom = this.$refs.chart;
+            // 检查图表容器是否可见
+            const rect = chartDom.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) {
+                // 图表容器不可见，延迟初始化
+                setTimeout(this.initChart, 100);
+                return;
+            }
             const myChart = echarts.init(chartDom);
 
-            // 模拟测试数据
-            const rawData = [
-                { Year: 1950, Country: 'Finland', Income: 3000 },
-                { Year: 1951, Country: 'Finland', Income: 3200 },
-                { Year: 1968, Country: 'Finland', Income: 3000 },
-            ];
+            this.$axios.get('/gold_prices')
+                .then(response => {
+                    const goldData = response.data;
 
-            const countries = [
-                'Finland',
-                'France',
-                'Germany',
-                'Iceland',
-                'Norway',
-                'Poland',
-                'Russia',
-                'United Kingdom'
-            ];
+                    const dataset = {
+                        source: goldData.map(item => {
+                            return [item.date, item.JO_52683, item.JO_52684, item.JO_52685];
+                        })
+                    };
 
-            const datasetWithFilters = [];
-            const seriesList = [];
+                    const option = {
+                        animationDuration: 1000,
+                        dataset: dataset,
+                        title: {
+                            text: '黄金价格可视化：'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            nameLocation: 'middle'
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [
+                            { type: 'line', seriesLayoutBy: 'column', encode: { x: 0, y: 1 }, name: '基础' },
+                            { type: 'line', seriesLayoutBy: 'column', encode: { x: 0, y: 2 }, name: '零售' },
+                            { type: 'line', seriesLayoutBy: 'column', encode: { x: 0, y: 3 }, name: '回收' }
+                        ]
+                    };
 
-            countries.forEach(country => {
-                var datasetId = 'dataset_' + country;
-                datasetWithFilters.push({
-                    id: datasetId,
-                    fromDatasetId: 'dataset_raw',
-                    transform: {
-                        type: 'filter',
-                        config: {
-                            and: [
-                                { dimension: 'Year', gte: 1950 },
-                                { dimension: 'Country', '=': country }
-                            ]
-                        }
-                    }
+                    myChart.setOption(option);
                 });
-                seriesList.push({
-                    type: 'line',
-                    datasetId: datasetId,
-                    showSymbol: false,
-                    name: country,
-                    endLabel: {
-                        show: true,
-                        formatter: function (params) {
-                            return params.value[3] + ': ' + params.value[0];
-                        }
-                    },
-                    labelLayout: {
-                        moveOverlap: 'shiftY'
-                    },
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    encode: {
-                        x: 'Year',
-                        y: 'Income',
-                        label: ['Country', 'Income'],
-                        itemName: 'Year',
-                        tooltip: ['Income']
-                    }
-                });
-            });
-
-            const option = {
-                animationDuration: 10000,
-                dataset: [
-                    {
-                        id: 'dataset_raw',
-                        source: rawData
-                    },
-                    ...datasetWithFilters
-                ],
-                title: {
-                    text: 'Income of Germany and France since 1950'
-                },
-                tooltip: {
-                    order: 'valueDesc',
-                    trigger: 'axis'
-                },
-                xAxis: {
-                    type: 'category',
-                    nameLocation: 'middle'
-                },
-                yAxis: {
-                    name: 'Income'
-                },
-                grid: {
-                    right: 140
-                },
-                series: seriesList
-            };
-            myChart.setOption(option);
         }
     }
 };

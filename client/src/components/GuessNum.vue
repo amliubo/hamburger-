@@ -3,8 +3,7 @@
         <div class="profile-container">
             <div class="profile-description" style="flex: 1;">
                 <div>
-                    <p class="profile-title"
-                        style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">
+                    <p class="profile-title" style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">
                         Welcome！
                     </p>
                     <p style="font-size: 16px;">欢迎来到这个有趣的 JavaScript 教程游戏！</p>
@@ -13,7 +12,8 @@
                     </p>
                 </div>
             </div>
-            <img src="@/assets/js.png" style="margin-right: 20px;">
+            <img src="https://smallsticker.com/uploads/6da5f7c677254b3c993ac73a17e80f02.jpg"
+                style="width: 25%; height: 50%;">
         </div>
 
         <div class="form">

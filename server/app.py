@@ -86,3 +86,9 @@ def dislike_post(data):
     update = UpdateOne(query, {"$inc": {"dislike": 1}})
     mongo_db.posts.bulk_write([update])
     return jsonify({"message": "success"})
+
+
+@app.route("/gold_prices", methods=["GET"])
+def get_gold_prices():
+    gold_prices = mongo_db.gold.find({}, {"_id": False}).sort("date", 1)
+    return jsonify(list(gold_prices))
