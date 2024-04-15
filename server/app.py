@@ -92,3 +92,14 @@ def dislike_post(data):
 def get_gold_prices():
     gold_prices = mongo_db.gold.find({}, {"_id": False}).sort("date", 1)
     return jsonify(list(gold_prices))
+
+
+@app.route("/notes", methods=["POST", "GET"])
+def handle_notes():
+    if request.method == "POST":
+        data = request.json
+        mongo_db.notes.insert_one(data)
+        return jsonify({"message": "success"}), 201
+    elif request.method == "GET":
+        notes = list(mongo_db.notes.find({}, {"_id": 0}))
+        return jsonify(notes)
