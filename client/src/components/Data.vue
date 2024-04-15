@@ -4,14 +4,13 @@
 
 <script>
 import * as echarts from 'echarts';
-import axios from 'axios';
 
 export default {
     mounted() {
         this.initChart();
     },
     methods: {
-        initChart() {
+        async initChart() {
             const chartDom = this.$refs.chart;
             // 检查图表容器是否可见
             const rect = chartDom.getBoundingClientRect();
@@ -22,42 +21,47 @@ export default {
             }
             const myChart = echarts.init(chartDom);
 
-            this.$axios.get('/gold_prices')
-                .then(response => {
-                    const goldData = response.data;
+            const response = await this.$axios.get('/gold_prices');
+            const goldData = response.data;
 
-                    const dataset = {
-                        source: goldData.map(item => {
-                            return [item.date, item.JO_52683, item.JO_52684, item.JO_52685];
-                        })
-                    };
+            const dataset = {
+                source: goldData.map(item => {
+                    return [item.date, item.JO_52683, item.JO_52684, item.JO_52685];
+                })
+            };
 
-                    const option = {
-                        animationDuration: 1000,
-                        dataset: dataset,
-                        title: {
-                            text: '黄金价格可视化：'
-                        },
-                        tooltip: {
-                            trigger: 'axis'
-                        },
-                        xAxis: {
-                            type: 'category',
-                            nameLocation: 'middle'
-                        },
-                        yAxis: {
-                            type: 'value'
-                        },
-                        series: [
-                            { type: 'line', seriesLayoutBy: 'column', encode: { x: 0, y: 1 }, name: '基础' },
-                            { type: 'line', seriesLayoutBy: 'column', encode: { x: 0, y: 2 }, name: '零售' },
-                            { type: 'line', seriesLayoutBy: 'column', encode: { x: 0, y: 3 }, name: '回收' }
-                        ]
-                    };
+            const option = {
+                animationDuration: 1000,
+                dataset: dataset,
+                title: {
+                    text: '黄金价格可视化：'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    nameLocation: 'middle',
+                    axisLabel: {
+                        formatter: function (value) {
+                            // 将日期字符串格式化为 'MM-DD' 形式
+                            return value.slice(5);
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    { type: 'line', seriesLayoutBy: 'column', encode: { x: 0, y: 1 }, name: '基础' },
+                    { type: 'line', seriesLayoutBy: 'column', encode: { x: 0, y: 2 }, name: '零售' },
+                    { type: 'line', seriesLayoutBy: 'column', encode: { x: 0, y: 3 }, name: '回收' }
+                ]
+            };
 
-                    myChart.setOption(option);
-                });
+            myChart.setOption(option);
         }
+
     }
-};
+}
 </script>

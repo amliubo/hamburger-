@@ -1,35 +1,24 @@
 import requests
-from bs4 import BeautifulSoup as bs4
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
-import time
 from pymongo import MongoClient
 
 # MongoDB Configuration
-client = MongoClient("mongodb://localhost:27017/")  # MongoDB连接地址
-mongo_db = client["hamburger"]  # 替换为你的数据库名称
+client = MongoClient("localhost", 27017)
+db = client["hamburger"]  # 创建名为 hamburger 的数据库
 
 
 def time_to_date(time):
     # 时间戳转换为日期
-    timestamp = (
-        time / 1000 + 24 * 60 * 60
-    )  # 将毫秒转换为秒,因为是UTC时间需加24小时*60分钟*60秒
+    timestamp = time / 1000  # 将毫秒转换为秒
     return datetime.utcfromtimestamp(timestamp).strftime("%Y-%m-%d")
 
 
 def date_to_time(date):
-    # 将日期字符串转换为datetime对象
-
-    date_format = "%Y-%m-%d"
-    date_obj = datetime.strptime(date, date_format)
-
-    # 获取UTC时间的时间戳（秒）
+    # 将日期字符串转换为时间戳（毫秒）
+    date_obj = datetime.strptime(date, "%Y-%m-%d")
     timestamp_seconds = date_obj.timestamp()
-
-    # 转换为毫秒
-    timestamp_milliseconds = int(timestamp_seconds * 1000)
-    return timestamp_milliseconds
+    return int(timestamp_seconds * 1000)
 
 
 def getPageData(pageSize, pagecount, data_style, header, time):
@@ -46,7 +35,6 @@ def getPageData(pageSize, pagecount, data_style, header, time):
     )
     # 获得json变量,里面记录着金价和记录日期
     quote_json_str = res.content.decode("utf-8")
-    # print(quote_json_str)
     quote_json = json.loads(quote_json_str[4:].replace("quote_json = ", ""))
     return quote_json
 
@@ -71,41 +59,39 @@ header = {
 
 
 def main():
-    # 以下注释代码可以直接传入今天的日期
-    date_str = datetime.now().strftime("%Y-%m-%d")
-
-    # 把当前日期传入转换函数后,获得如"1708656891526"这样的毫秒时间戳
-    time_milliseconds = date_to_time(date_str)
-    # print(time)
-
-    # 设置获得的金价数据条目数(可以设置1-500,但是因为分页数关系,可能最后的一页会报错,设置值越大爬取越快,如果要完整爬取请使用默认值10)
+    # 设置获得的金价数据条目数
     pageSize = 10
 
     # data_style表示返回金价类型:{'基础':'JO_52683','零售':'JO_52684','回收':'JO_52685'}
     data_styles = ["JO_52683", "JO_52684", "JO_52685"]
 
-    count = 0
     # 爬取你需要的总页数
-    pageMax = 999
+    pageMax = 313
 
-    # 初始化数据字典
-    data_dict = {"date": date_str}
+    for count in range(pageMax):
+        print(f"Retrieving data for page {count + 1}...")
+        # 获取今天的日期
+        date_str = (datetime.now() - timedelta(days=count)).strftime("%Y-%m-%d")
+        time_milliseconds = date_to_time(date_str)
 
-    while count <= pageMax:
         for data_style in data_styles:
             quote_json = getPageData(
                 pageSize, count, data_style, header, time_milliseconds
             )
             item = quote_json["data"][data_style][-1]  # 获取最后一条数据
-            data_dict[data_style] = item["q1"]  # 将数据加入字典
-        count += 1
+            # 查找数据库中是否存在该日期的记录
+            existing_record = db.gold.find_one({"date": date_str})
+            if existing_record:
+                # 如果存在，则更新记录
+                update_query = {"$set": {data_style: item["q1"]}}
+                db.gold.update_one({"date": date_str}, update_query)
+            else:
+                # 如果不存在，则插入新记录
+                data_dict = {"date": date_str, data_style: item["q1"]}
+                db.gold.insert_one(data_dict)
+        print(f"Data retrieval for page {count + 1} completed.")
 
-    # 打印数据字典
-    print("Data to be inserted:")
-    print(data_dict)
-
-    # 插入到数据库中
-    mongo_db.gold.insert_one(data_dict)
+    print("Data retrieval completed.")
 
 
 if __name__ == "__main__":
