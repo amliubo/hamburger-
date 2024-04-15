@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-carousel height="50px" direction="vertical" :autoplay="true">
+        <el-carousel height="70px" direction="vertical" :autoplay="true">
             <el-carousel-item v-for="(item, index) in items" :key="index">
                 <el-alert :title="item.title" :type="item.type" :effect="item.effect" :closable="item.closable" />
             </el-carousel-item>
