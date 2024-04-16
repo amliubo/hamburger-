@@ -15,16 +15,16 @@
 
         <!-- <el-sub-menu index="5">
           <template #title>📖 学习</template>
-<el-menu-item index="2-1">Java Script</el-menu-item>
-<el-menu-item index="2-2">Python</el-menu-item>
-<el-menu-item index="2-3">Vue</el-menu-item>
-<el-sub-menu index="2-4">
-  <template #title>item four</template>
-  <el-menu-item index="2-4-1">item 1</el-menu-item>
-  <el-menu-item index="2-4-2">item 2</el-menu-item>
-  <el-menu-item index="2-4-3">item 3</el-menu-item>
-</el-sub-menu>
-</el-sub-menu> -->
+            <el-menu-item index="2-1">Java Script</el-menu-item>
+            <el-menu-item index="2-2">Python</el-menu-item>
+            <el-menu-item index="2-3">Vue</el-menu-item>
+            <el-sub-menu index="2-4">
+            <template #title>item four</template>
+              <el-menu-item index="2-4-1">item 1</el-menu-item>
+              <el-menu-item index="2-4-2">item 2</el-menu-item>
+              <el-menu-item index="2-4-3">item 3</el-menu-item>
+          </el-sub-menu>
+        </el-sub-menu> -->
 
       </el-menu>
     </div>

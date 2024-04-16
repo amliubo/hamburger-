@@ -14,9 +14,7 @@
             <el-col :span="24">
                 <el-card v-for="activity in activities" :key="activity._id" class="custom-card">
                     <div class="activity-header">
-                        <!-- <el-avatar :src="activity.avatar" :size="40"></el-avatar> -->
-                        <el-avatar :src="`https://raw.githubusercontent.com/sweeterio/pixelpunks/main/punk6895.png`"
-                            :size="34"></el-avatar>
+                        <el-avatar :src="activity.avatar" :size="28"></el-avatar>
                         <div class="author-time">
                             <span class="author">@{{ activity.author }}</span>
                             <span class="time">{{ formatTime(activity.time) }} {{ activity.city }}</span>
@@ -41,6 +39,12 @@
                 <el-form-item label="昵称:" prop="author" class="bold-label">
                     <el-input v-model="activity.author" size="small" style="width: 50%;" clearable
                         class="bold-input"></el-input>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="avatar-list">
+                        <img v-for="(avatar, index) in avatars" :key="avatar.id" :src="avatar.url"
+                            @click="selectAvatar(avatar.url, index)"
+                            :class="{ 'selected-avatar': index === selectedAvatarIndex }">
+                    </div>
                 </el-form-item>
                 <el-form-item label="内容:" prop="description" class="bold-label">
                     <el-input v-model="activity.description" maxlength="1000" show-word-limit
@@ -73,6 +77,15 @@ export default {
             },
             activities: [],
             submitting: false,
+            avatars: [
+                { id: 1, url: 'https://www.pythonanywhere.com/user/liuboo/files/home/liuboo/AvatarCollection/punk1714.webp' },
+                { id: 2, url: 'https://www.pythonanywhere.com/user/liuboo/files/home/liuboo/AvatarCollection/punk4633.webp' },
+                { id: 3, url: 'https://www.pythonanywhere.com/user/liuboo/files/home/liuboo/AvatarCollection/punk4634.webp' },
+                { id: 4, url: 'https://www.pythonanywhere.com/user/liuboo/files/home/liuboo/AvatarCollection/punk4636.webp' },
+                { id: 5, url: 'https://www.pythonanywhere.com/user/liuboo/files/home/liuboo/AvatarCollection/punk5822.webp' },
+                { id: 6, url: 'https://www.pythonanywhere.com/user/liuboo/files/home/liuboo/AvatarCollection/punk.png' },
+            ],
+            selectedAvatarIndex: 0,
         };
     },
     methods: {
@@ -94,6 +107,10 @@ export default {
             } else {
                 return '刚刚';
             }
+        },
+        selectAvatar(avatarUrl, index) {
+            this.activity.avatar = avatarUrl;
+            this.selectedAvatarIndex = index;
         },
         async fetchActivities() {
             this.activities = (await this.$axios.get('/posts')).data;
@@ -189,5 +206,24 @@ export default {
 
 .description {
     margin-bottom: 0.1px;
+}
+
+.avatar-list {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.avatar-list img {
+    border-radius: 50%;
+    /* overflow: hidden; */
+}
+
+.avatar-list img:hover {
+    border: 1px solid #409EFF;
+}
+
+.selected-avatar {
+    border: 1px solid #409EFF;
 }
 </style>

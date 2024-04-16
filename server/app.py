@@ -40,7 +40,7 @@ def handle_dislike():
 def create_activity():
     data = request.json
     mongo_db.activities.insert_one(data)
-    return jsonify({"message": "Activity created successfully"}), 201
+    return jsonify({"message": "success"}), 201
 
 
 @app.route("/activities", methods=["GET"])
@@ -60,6 +60,7 @@ def get_posts():
             "time": str(post["time"]),
             "like": post["like"],
             "dislike": post["dislike"],
+            "avatar": post["avatar"],
             "city": str(post["city"]),
         }
         serialized_posts.append(serialized_post)
