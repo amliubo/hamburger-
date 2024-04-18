@@ -1,6 +1,6 @@
 <template>
     <el-avatar :size="180" shape="square"
-        src="https://www.pythonanywhere.com/user/liuboo/files/home/liuboo/AvatarCollection/avatar.jpg"
+        src="http://192.168.3.41/hamburger_avatarlist/avatar.jpg"
         style="margin-right: 20px;" />
     <div class="profile-description" style="flex: 1;">
         <div>
