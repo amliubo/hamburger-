@@ -40,7 +40,7 @@ def handle_dislike():
 def create_activity():
     data = request.json
     mongo_db.activities.insert_one(data)
-    return jsonify({"message": "success"}), 201
+    return jsonify({"message": "success"})
 
 
 @app.route("/activities", methods=["GET"])
@@ -100,7 +100,30 @@ def handle_notes():
     if request.method == "POST":
         data = request.json
         mongo_db.notes.insert_one(data)
-        return jsonify({"message": "success"}), 201
+        return jsonify({"message": "success"})
     elif request.method == "GET":
         notes = list(mongo_db.notes.find({}, {"_id": 0}))
         return jsonify(notes)
+
+
+# 文件管理
+UPLOAD_FOLDER = "C:/NGINX_RESOURCE"  # 替换为您的 nginx 目录路径
+import os
+
+
+@app.route("/files", methods=["GET"])
+def get_files():
+    files = os.listdir(UPLOAD_FOLDER)
+    print('files', files)
+    return jsonify(files)
+
+
+@app.route("/upload", methods=["POST"])
+def upload_file():
+    uploaded_file = request.files["file"]
+    # 处理文件上传逻辑
+    return jsonify({"message": "success"})
+
+
+if __name__ == "__main__":
+    app.run(host="10.10.20.24", port=8000, debug=True)

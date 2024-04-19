@@ -62,7 +62,8 @@ export default {
             const response = await this.$axios.post('/notes', {
                 content: this.noteContent
             });
-            if (response.status === 201) {
+            console.log(response)
+            if (response.status === 200) {
                 ElMessage.success('笔记创建成功！');
                 this.noteContent = '';
                 this.getNotes();
