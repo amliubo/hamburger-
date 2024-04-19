@@ -78,12 +78,12 @@ export default {
             activities: [],
             submitting: false,
             avatars: [
-                { id: 1, url: 'http://192.168.3.41/hamburger_avatarlist/punk1714.webp' },
-                { id: 2, url: 'http://192.168.3.41/hamburger_avatarlist/punk4633.webp' },
-                { id: 3, url: 'http://192.168.3.41/hamburger_avatarlist/punk4634.webp' },
-                { id: 4, url: 'http://192.168.3.41/hamburger_avatarlist/punk4636.webp' },
-                { id: 5, url: 'http://192.168.3.41/hamburger_avatarlist/punk5822.webp' },
-                { id: 6, url: 'http://192.168.3.41/hamburger_avatarlist/punk.png' },
+                { id: 1, url: 'http://47.100.41.212:8080/images/AvatarResource/punk1714.webp' },
+                { id: 2, url: 'http://47.100.41.212:8080/images/AvatarResource/punk4633.webp' },
+                { id: 3, url: 'http://47.100.41.212:8080/images/AvatarResource/punk4634.webp' },
+                { id: 4, url: 'http://47.100.41.212:8080/images/AvatarResource/punk4636.webp' },
+                { id: 5, url: 'http://47.100.41.212:8080/images/AvatarResource/punk5822.webp' },
+                { id: 6, url: 'http://47.100.41.212:8080/images/AvatarResource/punk.png' },
             ],
             selectedAvatarIndex: 0,
         };

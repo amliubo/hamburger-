@@ -1,6 +1,6 @@
 <template>
     <el-avatar :size="180" shape="square"
-        src="http://192.168.3.41/hamburger_avatarlist/avatar.jpg"
+        src="http://47.100.41.212:8080/images/AvatarResource/avatar.jpg"
         style="margin-right: 20px;" />
     <div class="profile-description" style="flex: 1;">
         <div>
